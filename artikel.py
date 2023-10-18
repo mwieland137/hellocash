@@ -1,4 +1,5 @@
 import requests
+import csv
 
 baseUrl = "https://api.hellocash.business/api/v1"
 urlArticles = "/articles"
@@ -32,6 +33,14 @@ def main():
         
         my_list = list(article.values())
         rows.append(my_list)
+
+
+    with open('eggs.csv', 'w', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile, delimiter=';',
+                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        spamwriter.writerow(fields)
+        spamwriter.writerows(rows)
+
 
     print(fields)
     print(rows)    
