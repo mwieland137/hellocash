@@ -1,17 +1,18 @@
 import requests
 import csv
+import time
 
 baseUrl = "https://api.hellocash.business/api/v1"
 urlArticles = "/articles"
-authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTc1MzMwNjYuNDE1MTMsImNyaWQiOiIxNTI0MjgifQ.RZLb8n7BmvfEoXUy6GwR19Y40sSp2hxP_WtCG5SN_eU"
-
-
+auth_test_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTc1MzMwNjYuNDE1MTMsImNyaWQiOiIxNTI0MjgifQ.RZLb8n7BmvfEoXUy6GwR19Y40sSp2hxP_WtCG5SN_eU"
+auth_live_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTc4ODUyNzYuODc3MTA5LCJjcmlkIjoiMTUyNDIwIn0.BdXKBbMqlJhZqOE2PLzEkYntbTd1DPL2MGVMUWRhf6I"
+auth_token = auth_live_token
 
 def read_articles():
     print("Hey!")
 
     headers = {
-        'Authorization' : 'Bearer ' + authToken,
+        'Authorization' : 'Bearer ' + auth_token,
         'Content-Type' : 'application/json'
     }
 
@@ -51,44 +52,52 @@ def read_all_articles():
     print("Hey!")
 
     headers = {
-        'Authorization' : 'Bearer ' + authToken,
+        'Authorization' : 'Bearer ' + auth_token,
         'Content-Type' : 'application/json'
     }
 
-    parameters = {
-        'limit' : 2,
-        'offset' : 200
-    }
-
-    response = requests.get(baseUrl + urlArticles, params=parameters, headers=headers)
-   
-    if len(response.json()['articles']) == 0:
-        print("keine Artikel (mehr) vorhanden!")
-        return
-    
+    # holt in Abschnitten von 900 Datensätzen die Artikel von hellocash ab und speichert sie im Array 'rows'
+    # Schleife bricht ab, wenn keine Artikel mehr zu holen sind (oder ein Fehler auftritt)
+    offset = 1
+    limit = 900
+    total = 0
+    header_line = False # beim ersten Abruf der Artikel werden einmalig die keys als Überschrift für die resultierende csv-Datei ausgelesen
     rows = []
-    header_line = False
-    for article in response.json()['articles']:
-        if header_line == False:
-            fields = list(article.keys())
-            header_line = True
+    while True:
+        parameters = {
+            'limit' : limit,
+            'offset' : offset
+        }
+
+        response = requests.get(baseUrl + urlArticles, params=parameters, headers=headers)
+    
+        if len(response.json()['articles']) == 0:
+            print("keine Artikel (mehr) vorhanden!")
+            break
         
-        my_list = list(article.values())
-        rows.append(my_list)
+        i = 0
+        
+        for article in response.json()['articles']:
+            if header_line == False:
+                fields = list(article.keys())
+                header_line = True
+            
+            my_list = list(article.values())
+            new_list = [x if not isinstance(x, str) else x.encode('ascii', 'ignore').decode('ascii') for x in my_list]
+            rows.append(new_list)
+            i = i + 1
+
+        offset = offset + 1
+
+        total = total + i
+        print(f"{i} Datensäte gelesen, damit total {total}")
 
 
-    with open('eggs.csv', 'w', newline='') as csvfile:
+    with open('all_eggs.csv', 'w', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
         spamwriter.writerow(fields)
-        spamwriter.writerows(rows)
-
-
-    print(fields)
-    print(rows)    
-    
-
-
+        spamwriter.writerows(rows) 
 
 def write_articles():
     print("Hej!")
@@ -107,10 +116,11 @@ def write_articles():
 
 
     headers = {
-        'Authorization' : 'Bearer ' + authToken,
+        'Authorization' : 'Bearer ' + auth_token,
         'Content-Type' : 'application/json'
     }
 
+    i = 0
     for article in res:
         
         # article.pop('article_id')
@@ -140,9 +150,13 @@ def write_articles():
         response = requests.post(baseUrl + urlArticles, json=article, headers=headers)
         print("---------------uploaded--------------------")
         print(response.json())
+        i = i + 1
+        print(f'das war der {i}-te Artikel')
+        time.sleep(1)
+
     
 
 
 if __name__ == "__main__":
     # read_articles()
-    write_article_test()
+    write_articles()
