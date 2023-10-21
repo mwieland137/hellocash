@@ -1,0 +1,5 @@
+-------------- uploading -----------------
+{'article_id': 13693074, 'article_category_id': 548514, 'article_name': 'Seiko Uhr SRPD51K1', 'article_code': 'SRPD51K1-023', 'article_eanCode': '4954628232106', 'article_taxRate': 19.0, 'article_net_purchasePrice': 150.76, 'article_net_sellingPrice': 260.504, 'article_gross_sellingPrice': 310.0, 'article_stock': 13, 'article_comment': 'SEIKO 5 SPORTS SS HD'}
+----------uploaded - response     --------
+<Response [200]>
+{'article_id': '13693074', 'article_category_id': 548514, 'article_name': 'Seiko Uhr SRPD51K1', 'article_code': 'SRPD51K1-023', 'article_eanCode': '', 'article_taxRate': '0.00', 'article_unit': '', 'article_net_purchacePrice': '0', 'article_net_purchasePrice': '0', 'article_net_sellingPrice': '0', 'article_gross_sellingPrice': '0', 'article_stock': '1', 'article_minStock': '0', 'article_comment': 'SEIKO 5 SPORTS SS HD', 'article_billReference': '0', 'article_color': '', 'category': {'category_id': '548514', 'category_name': 'delete'}}
