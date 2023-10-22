@@ -93,7 +93,7 @@ def read_all_articles():
         print(f"{i} Datensäte gelesen, damit total {total}")
 
 
-    with open('all_eggs.csv', 'w', newline='') as csvfile:
+    with open('all_eggs2.csv', 'w', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=';',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
         spamwriter.writerow(fields)
@@ -102,7 +102,7 @@ def read_all_articles():
 def write_articles():
     print("Hej!")
 
-    with open('eggs.csv', newline='') as csvfile:
+    with open('eggs_test.csv', newline='') as csvfile:
         header_read = False
         res = []
         spamreader = csv.reader(csvfile, delimiter=';', quotechar='"')
@@ -158,5 +158,5 @@ def write_articles():
 
 
 if __name__ == "__main__":
-    # read_articles()
+    # read_all_articles()
     write_articles()
