@@ -6,7 +6,7 @@ baseUrl = "https://api.hellocash.business/api/v1"
 urlArticles = "/articles"
 auth_test_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTc1MzMwNjYuNDE1MTMsImNyaWQiOiIxNTI0MjgifQ.RZLb8n7BmvfEoXUy6GwR19Y40sSp2hxP_WtCG5SN_eU"
 auth_live_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTc4ODUyNzYuODc3MTA5LCJjcmlkIjoiMTUyNDIwIn0.BdXKBbMqlJhZqOE2PLzEkYntbTd1DPL2MGVMUWRhf6I"
-auth_token = auth_live_token
+auth_token = auth_test_token
 
 def read_articles():
     print("Hey!")
@@ -18,7 +18,7 @@ def read_articles():
 
     parameters = {
         'limit' : 2,
-        'offset' : 200
+        'offset' : 100
     }
 
     response = requests.get(baseUrl + urlArticles, params=parameters, headers=headers)
@@ -108,7 +108,20 @@ def write_articles():
         spamreader = csv.reader(csvfile, delimiter=';', quotechar='"')
         for row in spamreader:
             if not header_read:
-                # header_dict = dict(enumerate(row))
+                # hellocash isue: response field names are different from request field names
+                for i in range(len(row)):
+                    if row[i] == 'article_eanCode':
+                        row[i] = 'article_ean_code'
+                    elif row[i] == 'article_taxRate':
+                        row[i] = 'article_tax_rate'
+                    elif row[i] == 'article_net_purchasePrice':
+                        row[i] = 'article_net_purchase_price'
+                    elif row[i] == 'article_net_sellingPrice':
+                        row[i] = 'article_net_selling_price'
+                    elif row[i] == 'article_gross_sellingPrice':
+                        row[i] = 'article_gross_selling_price'
+                    elif row[i] == 'article_minStock':
+                        row[i] = 'article_min_stock'
                 header_row = row
                 header_read = True
             else:
@@ -158,5 +171,6 @@ def write_articles():
 
 
 if __name__ == "__main__":
+    read_articles()
     # read_all_articles()
-    write_articles()
+    # write_articles()
