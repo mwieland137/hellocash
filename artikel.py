@@ -108,7 +108,7 @@ def read_all_articles():
 def write_articles():
     print("Hej!")
 
-    with open('eggs_test.csv', newline='') as csvfile:
+    with open('eggs_back.csv', newline='', encoding="utf8") as csvfile:
         header_read = False
         res = []
         spamreader = csv.reader(csvfile, delimiter=';', quotechar='"')
@@ -295,6 +295,6 @@ def check_date(datum: str) -> bool:
 if __name__ == "__main__":
     # read_articles()
     # read_all_articles()
-    # write_articles()
+    write_articles()
     # print(check_date('2023-09-31'))
-    read_invoices('2023-11-03', '2023-11-03')
+    # read_invoices('2023-11-03', '2023-11-03')
