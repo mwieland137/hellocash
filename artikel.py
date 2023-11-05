@@ -297,4 +297,4 @@ if __name__ == "__main__":
     # read_all_articles()
     # write_articles()
     # print(check_date('2023-09-31'))
-    read_invoices('2023-11-02', '2023-11-02')
+    read_invoices('2023-11-03', '2023-11-03')
